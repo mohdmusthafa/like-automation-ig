@@ -1,5 +1,4 @@
 import nconf from "nconf";
-import chalk from "chalk";
 import moment from "moment";
 import handleError from "./errorHandler";
 import messages from "./messages";
@@ -9,7 +8,6 @@ export * from "./types";
 
 const scheduleNextRun = () => {
   let sleep = nconf.get("sleep");
-
   const nextRun = moment(
     new Date().getTime() + parseInt(sleep) * 1000
   ).fromNow();

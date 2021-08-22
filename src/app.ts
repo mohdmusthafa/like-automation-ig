@@ -12,6 +12,7 @@ import {
   mkdirSync,
 } from "fs";
 import { likeMedia, getMedias, UserInput } from "./common";
+import { getCredentials } from "./helpers";
 
 prompt.start({ delimiter: colors.green(" >") });
 prompt.message = "";
@@ -19,28 +20,8 @@ prompt.message = "";
 nconf.use("memory");
 
 (async () => {
-  let { username, password, sleep }: UserInput = await prompt.get([
-    {
-      name: "username",
-      required: true,
-      message: "username is not allowed to be empty",
-      description: colors.white("Enter your username"),
-    },
-    {
-      name: "password",
-      required: true,
-      message: "password is not allowed to be empty",
-      description: colors.white("Enter your password"),
-    },
-    {
-      name: "sleep",
-      required: true,
-      message: "sleep is not allowed to be empty",
-      description: colors.white("Enter sleep in seconds"),
-      type: "number",
-    },
-  ]);
-
+  
+  const { username, password, sleep } = await getCredentials();
   nconf.set("sleep", sleep);
 
   const ig = new IgApiClient();
