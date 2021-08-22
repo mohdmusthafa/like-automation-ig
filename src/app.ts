@@ -20,7 +20,10 @@ prompt.message = "";
 nconf.use("memory");
 
 (async () => {
-  
+  // const JUST_NOW_TIME = new Date().getTime() - 60000;
+  const JUST_NOW_TIME = 1626998400000;
+  nconf.set('JUST_NOW_TIME', JUST_NOW_TIME)
+
   const { username, password, sleep } = await getCredentials();
   nconf.set("sleep", sleep);
 
