@@ -8,8 +8,8 @@ const successMessages = {
 }
 
 const commonMessages = {
-    posted: (time: number) => log(chalk.yellow(`posted ${time}`)),
-    nextRun: (time: number) => log(chalk.magenta(`next run ${time}`)),
+    posted: (time: any) => log(chalk.yellow(`posted ${time}`)),
+    nextRun: (time: any) => log(chalk.magenta(`next run ${time}`)),
 }
 
 const errorMessages = {

@@ -13,40 +13,29 @@ export const likeMedia = async (medias: any, ig: any) => {
     for (const media of medias) {
       if (!media.has_liked) {
         if (checkIsJustNow(media)) {
-          messages.foundJustNowPost()
-          
+          messages.foundJustNowPost();
+
           const status = await like(media, ig).catch((error: any) => {
-            console.log(chalk.red(error.message));
-            console.log(chalk.redBright("Post like failed."));
+            messages.error(error.message);
+            messages.likeFailed();
             handleError(error);
           });
 
-          if (status) {
-            console.log(
-              chalk.green(
-                `Post liked successfully ===> ${media.user.username} `
-              )
-            );
-          }
+          if (status) messages.likeSuccess(media.user.username);
         } else {
-          console.log(
-            chalk.yellow(
-              `posted ${moment(
-                new Date(media.taken_at * 1000).getTime()
-              ).fromNow()}`
-            )
-          );
+          const postedTime = moment(
+            new Date(media.taken_at * 1000).getTime()
+          ).fromNow();
+          messages.posted(postedTime);
         }
       }
     }
 
-    console.log(
-      chalk.magenta(
-        `next run ${moment(
-          new Date().getTime() + parseInt(sleep) * 1000
-        ).fromNow()}`
-      )
-    );
+    const nextRun = moment(
+      new Date().getTime() + parseInt(sleep) * 1000
+    ).fromNow();
+    messages.nextRun(nextRun);
+
     await new Promise((r) => setTimeout(r, parseInt(sleep) * 1000));
   }
 };
@@ -56,7 +45,7 @@ export const getMedias = async (ig: any) => {
     .timeline()
     .items()
     .catch((error: { message: unknown }) => {
-      console.log(chalk.red(error.message));
+      messages.error(error.message);
       handleError(error);
     });
 };
