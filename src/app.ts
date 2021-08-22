@@ -19,11 +19,12 @@ import moment from "moment";
 import {
     UserInput
 } from './app.types'
-import { accountReLoginAndExit } from './common'
+import { accountReLoginAndExit, likeMedia } from './common'
 
 prompt.start({ delimiter: colors.green(" >") });
 prompt.message = "";
 
+nconf.use('memory');
 
 
 (async () => {
@@ -53,16 +54,18 @@ prompt.message = "";
     },
   ]);
 
+  nconf.set('sleep', sleep)
+
   const ig = new IgApiClient();
   ig.state.generateDevice(username);
 
   let tokenPath = `${__dirname}/token/${username}.json`;
   let tokenDirectory = `${__dirname}/token`;
 
-  nconf.use('memory')
+  
   nconf.set('tokenPath', tokenPath);
   nconf.set('tokenDirectory', tokenDirectory);
-  
+
 
   if (!existsSync(tokenDirectory)) {
     mkdirSync(tokenDirectory);
@@ -108,64 +111,7 @@ prompt.message = "";
         }
       });
 
-    if (medias?.length) {
-      for (const media of medias) {
-        if (!media.has_liked) {
-          if (
-            moment(new Date(media.taken_at * 1000).getTime()).isAfter(
-              moment(new Date().getTime() - 60000)
-            )
-          ) {
-            console.log(chalk.blueBright("found just now post."));
-
-            let { status } = await ig.media
-              .like({
-                mediaId: media.id,
-                moduleInfo: { module_name: "feed_timeline" },
-                d: 0,
-              })
-              .catch((error) => {
-                console.log(chalk.red(error.message));
-
-                console.log(chalk.redBright("Post like failed."));
-
-                if (
-                  error instanceof IgLoginRequiredError ||
-                  error instanceof IgUserHasLoggedOutError ||
-                  error instanceof IgCheckpointError
-                ) {
-                  accountReLoginAndExit()
-                }
-              });
-
-            if (status) {
-              console.log(
-                chalk.green(
-                  `Post liked successfully ===> ${media.user.username} `
-                )
-              );
-            }
-          } else {
-            console.log(
-              chalk.yellow(
-                `posted ${moment(
-                  new Date(media.taken_at * 1000).getTime()
-                ).fromNow()}`
-              )
-            );
-          }
-        }
-      }
-
-      console.log(
-        chalk.magenta(
-          `next run ${moment(
-            new Date().getTime() + parseInt(sleep) * 1000
-          ).fromNow()}`
-        )
-      );
-      await new Promise((r) => setTimeout(r, parseInt(sleep) * 1000));
-    }
+      await likeMedia(medias, ig);
   }
 })();
 
