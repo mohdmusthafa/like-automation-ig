@@ -11,8 +11,9 @@ import {
   writeFileSync,
   mkdirSync,
 } from "fs";
-import { likeMedia, getMedias, UserInput } from "./common";
+import { likeMedia, getMedias, UserInput, login } from "./common";
 import { getCredentials } from "./helpers";
+import messages from "./common/messages";
 
 prompt.start({ delimiter: colors.green(" >") });
 prompt.message = "";
@@ -38,31 +39,28 @@ nconf.use("memory");
   }
 
   if (!existsSync(tokenPath)) {
-    await ig.account.login(username, password).catch((error) => {
-      console.log(chalk.red(error.message));
-      console.log(chalk.red("Login failed try again !."));
-      process.exit();
-    });
+    await login(username, password, ig);
 
-    console.log(chalk.green("successfully logged in."));
-
-    console.log(chalk.yellow("Saving token"));
+    messages.successLogin()
+    messages.savingToken()
 
     const serialized = await ig.state.serialize();
     delete serialized.constants;
     writeFileSync(tokenPath, JSON.stringify(serialized));
 
-    console.log(chalk.greenBright("Token successfully saved."));
+    messages.tokenSaved()
   } else {
-    console.log(chalk.yellowBright("Token exist."));
+    messages.tokenExists()
 
     let token = readFileSync(tokenPath, { encoding: "utf-8" });
     await ig.state.deserialize(token);
-    console.log(chalk.green("successfully logged in."));
+
+    messages.successLogin()
   }
 
   while (true) {
     let medias = await getMedias(ig);
     await likeMedia(medias, ig);
   }
+  
 })();

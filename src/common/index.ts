@@ -51,3 +51,11 @@ export const getMedias = async (ig: any) => {
       handleError(error);
     });
 };
+
+export const login = async (username: string, password: string, ig: any) => {
+  try {
+    await ig.account.login(username, password)
+  } catch (error) {
+    handleError(error)
+  }
+}
