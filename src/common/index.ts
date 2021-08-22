@@ -2,28 +2,24 @@ import nconf from "nconf";
 import chalk from "chalk";
 import moment from "moment";
 import handleError from "./errorHandler";
-import { like } from "../services";
+import messages from "./messages";
+import { checkIsJustNow, like } from "../services";
 
-export * from './types'
+export * from "./types";
 
 export const likeMedia = async (medias: any, ig: any) => {
   let sleep = nconf.get("sleep");
   if (medias?.length) {
     for (const media of medias) {
       if (!media.has_liked) {
-        if (
-          moment(new Date(media.taken_at * 1000).getTime()).isAfter(
-            moment(new Date().getTime() - 60 * 60 * 60 * 24 * 7 * 3)
-          )
-        ) {
-          console.log(chalk.blueBright("found just now post."));
-
-          const status = await like(media, ig)
-            .catch((error: any) => {
-              console.log(chalk.red(error.message));
-              console.log(chalk.redBright("Post like failed."));
-              handleError(error)
-            });
+        if (checkIsJustNow(media)) {
+          messages.foundJustNowPost()
+          
+          const status = await like(media, ig).catch((error: any) => {
+            console.log(chalk.red(error.message));
+            console.log(chalk.redBright("Post like failed."));
+            handleError(error);
+          });
 
           if (status) {
             console.log(
@@ -59,8 +55,8 @@ export const getMedias = async (ig: any) => {
   return ig.feed
     .timeline()
     .items()
-    .catch((error: { message: unknown; }) => {
+    .catch((error: { message: unknown }) => {
       console.log(chalk.red(error.message));
-      handleError(error)
+      handleError(error);
     });
 };
