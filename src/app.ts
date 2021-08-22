@@ -1,38 +1,25 @@
 import prompt from "prompt";
-import nconf from 'nconf';
+import nconf from "nconf";
 import colors from "colors/safe";
 import {
   IgApiClient,
-  IgCheckpointError,
-  IgLoginRequiredError,
-  IgUserHasLoggedOutError,
 } from "instagram-private-api";
 import chalk from "chalk";
 import {
   existsSync,
   readFileSync,
-  unlinkSync,
   writeFileSync,
   mkdirSync,
 } from "fs";
-import moment from "moment";
-import {
-    UserInput
-} from './app.types'
-import { accountReLoginAndExit, likeMedia } from './common'
+import { likeMedia, getMedias, UserInput } from "./common";
 
 prompt.start({ delimiter: colors.green(" >") });
 prompt.message = "";
 
-nconf.use('memory');
-
+nconf.use("memory");
 
 (async () => {
-  let {
-    username,
-    password,
-    sleep,
-  }: UserInput = await prompt.get([
+  let { username, password, sleep }: UserInput = await prompt.get([
     {
       name: "username",
       required: true,
@@ -54,7 +41,7 @@ nconf.use('memory');
     },
   ]);
 
-  nconf.set('sleep', sleep)
+  nconf.set("sleep", sleep);
 
   const ig = new IgApiClient();
   ig.state.generateDevice(username);
@@ -62,10 +49,8 @@ nconf.use('memory');
   let tokenPath = `${__dirname}/token/${username}.json`;
   let tokenDirectory = `${__dirname}/token`;
 
-  
-  nconf.set('tokenPath', tokenPath);
-  nconf.set('tokenDirectory', tokenDirectory);
-
+  nconf.set("tokenPath", tokenPath);
+  nconf.set("tokenDirectory", tokenDirectory);
 
   if (!existsSync(tokenDirectory)) {
     mkdirSync(tokenDirectory);
@@ -96,23 +81,7 @@ nconf.use('memory');
   }
 
   while (true) {
-    let medias = await ig.feed
-      .timeline()
-      .items()
-      .catch((error) => {
-        console.log(chalk.red(error.message));
-
-        if (
-          error instanceof IgLoginRequiredError ||
-          error instanceof IgUserHasLoggedOutError ||
-          error instanceof IgCheckpointError
-        ) {
-          accountReLoginAndExit()
-        }
-      });
-
-      await likeMedia(medias, ig);
+    let medias = await getMedias(ig);
+    await likeMedia(medias, ig);
   }
 })();
-
-

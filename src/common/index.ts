@@ -1,46 +1,28 @@
 import nconf from "nconf";
-import { IgLoginRequiredError, IgUserHasLoggedOutError, IgCheckpointError } from 'instagram-private-api'
-import { unlinkSync } from "fs";
 import chalk from "chalk";
 import moment from "moment";
+import handleError from "./errorHandler";
+import { like } from "../services";
 
-export const accountReLoginAndExit = () => {
-  let tokenPath: string = nconf.get("tokenPath");
-  unlinkSync(tokenPath);
-  console.log(chalk.red("account relogin required."));
-  process.exit();
-};
+export * from './types'
 
-export const likeMedia = async (medias:any, ig:any) => {
-    let sleep = nconf.get('sleep')
+export const likeMedia = async (medias: any, ig: any) => {
+  let sleep = nconf.get("sleep");
   if (medias?.length) {
     for (const media of medias) {
       if (!media.has_liked) {
         if (
           moment(new Date(media.taken_at * 1000).getTime()).isAfter(
-            moment(new Date().getTime() - 18000000)
+            moment(new Date().getTime() - 60 * 60 * 60 * 24 * 7 * 3)
           )
         ) {
           console.log(chalk.blueBright("found just now post."));
 
-          let { status } = await ig.media
-            .like({
-              mediaId: media.id,
-              moduleInfo: { module_name: "feed_timeline" },
-              d: 0,
-            })
-            .catch((error:any) => {
+          const status = await like(media, ig)
+            .catch((error: any) => {
               console.log(chalk.red(error.message));
-
               console.log(chalk.redBright("Post like failed."));
-
-              if (
-                error instanceof IgLoginRequiredError ||
-                error instanceof IgUserHasLoggedOutError ||
-                error instanceof IgCheckpointError
-              ) {
-                accountReLoginAndExit();
-              }
+              handleError(error)
             });
 
           if (status) {
@@ -71,4 +53,14 @@ export const likeMedia = async (medias:any, ig:any) => {
     );
     await new Promise((r) => setTimeout(r, parseInt(sleep) * 1000));
   }
+};
+
+export const getMedias = async (ig: any) => {
+  return ig.feed
+    .timeline()
+    .items()
+    .catch((error: { message: unknown; }) => {
+      console.log(chalk.red(error.message));
+      handleError(error)
+    });
 };
