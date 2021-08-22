@@ -4,14 +4,13 @@ import colors from "colors/safe";
 import {
   IgApiClient,
 } from "instagram-private-api";
-import chalk from "chalk";
 import {
   existsSync,
   readFileSync,
   writeFileSync,
   mkdirSync,
 } from "fs";
-import { likeMedia, getMedias, UserInput, login } from "./common";
+import { likeMedia, getMedias, login } from "./common";
 import { getCredentials } from "./helpers";
 import messages from "./common/messages";
 
@@ -62,5 +61,5 @@ nconf.use("memory");
     let medias = await getMedias(ig);
     await likeMedia(medias, ig);
   }
-  
+
 })();
