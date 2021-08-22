@@ -7,21 +7,30 @@ import { checkIsJustNow, like } from "../services";
 
 export * from "./types";
 
-export const likeMedia = async (medias: any, ig: any) => {
+const scheduleNextRun = () => {
   let sleep = nconf.get("sleep");
+
+  const nextRun = moment(
+    new Date().getTime() + parseInt(sleep) * 1000
+  ).fromNow();
+  messages.nextRun(nextRun);
+  return new Promise((r) => setTimeout(r, parseInt(sleep) * 1000));
+}
+
+export const likeMedia = async (medias: any, ig: any) => {
   if (medias?.length) {
     for (const media of medias) {
       if (!media.has_liked) {
         if (checkIsJustNow(media)) {
           messages.foundJustNowPost();
-
-          const status = await like(media, ig).catch((error: any) => {
+          try {
+            const status = await like(media, ig);
+            if (status) messages.likeSuccess(media.user.username);
+          } catch (error) {
             messages.error(error.message);
             messages.likeFailed();
             handleError(error);
-          });
-
-          if (status) messages.likeSuccess(media.user.username);
+          }
         } else {
           const postedTime = moment(
             new Date(media.taken_at * 1000).getTime()
@@ -31,12 +40,7 @@ export const likeMedia = async (medias: any, ig: any) => {
       }
     }
 
-    const nextRun = moment(
-      new Date().getTime() + parseInt(sleep) * 1000
-    ).fromNow();
-    messages.nextRun(nextRun);
-
-    await new Promise((r) => setTimeout(r, parseInt(sleep) * 1000));
+    await scheduleNextRun()
   }
 };
 
