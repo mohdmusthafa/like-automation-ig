@@ -1,33 +1,27 @@
-<!DOCTYPE Html>
-<html> 
-<body>
-   <ul id="eventlist"> </ul>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Instagram Auto Liker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <link rel="stylesheet" href="style.css" />
+  <body>
+    <header></header>
 
-   <script>              
-    var eventList = document.getElementById("eventlist");
-    var evtSource = new EventSource("http://localhost:3000/logs");
+    <main>
+      <div class="container">
+        <div class="logs-container" >
+          <ul id="logs-list" class="logs-list"></ul>
+        </div>
+      </div>
+    </main>
 
-    var newElement = document.createElement("li");
-    newElement.innerHTML = "Messages:";
-    eventList.appendChild(newElement);
-
-
-    evtSource.onmessage = function(e) {
-        console.log("received event");
-        console.log(e);
-        var newElement = document.createElement("li");
-
-        newElement.innerHTML = "message: " + e.data;
-        eventList.appendChild(newElement);
-    };      
-
-    evtSource.onerror = function(e) {
-        console.log("EventSource failed.");
-    };
-
-    console.log(evtSource);
-
-    </script>
-
-</body>
+    <footer></footer>
+    <script src="bundle.js"></script>
+  </body>
 </html>

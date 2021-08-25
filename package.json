@@ -3,10 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "nodemonConfig": {
+    "ignore": [
+      "./src/modules/dashboard/static"
+    ]
+  },
   "scripts": {
     "start": "node dist/app",
+    "build:dashboard": "browserify src/modules/dashboard/client/script.js > src/modules/dashboard/static/bundle.js",
+    "build": "tsc -p .",
     "dev": "nodemon src/app.ts --dashboard true",
-    "build": "tsc -p ."
+    "nodemonh": "nodemon -h",
+    "dev:dashboard": "nodemon --exec 'npm run build:dashboard' ./src/modules/dashboard/client/script.js"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +25,8 @@
     "@types/node": "^16.7.1",
     "@types/prompt": "^1.1.1",
     "@types/pubsub-js": "^1.8.2",
+    "ansi-to-html": "^0.7.1",
+    "browserify": "^17.0.0",
     "nodemon": "^2.0.12",
     "ts-node": "^10.2.1"
   },
@@ -24,6 +34,7 @@
     "chalk": "^4.1.2",
     "express": "^4.17.1",
     "instagram-private-api": "^1.45.1",
+    "jquery": "^3.6.0",
     "minimist": "^1.2.5",
     "moment": "^2.29.1",
     "nconf": "^0.11.3",

@@ -7,8 +7,8 @@ const ANSI_ESCAPE = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A
 
 const dashboardLogger = (message: any) => {
     console.log(message);
-    const chalkEscapedString = message.replace(ANSI_ESCAPE, "")
-    PubSub.publish("LOGGER", chalkEscapedString);
+    // const chalkEscapedString = message.replace(ANSI_ESCAPE, "")
+    PubSub.publish("LOGGER", message);
 }
 
 let log = dashboardEnabled ? dashboardLogger : console.log;

@@ -1,0 +1,39 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --console-bg: #282C35;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.logs-container {
+    width: 80vw;
+    height: 70vw;
+    background-color: var(--console-bg);
+    margin-top: 2rem;
+    border-radius: 10px;
+    display: flex;
+}
+
+.logs-list {
+    list-style: none;
+    margin: 10px 15px;
+    flex: 1;
+    overflow-y: scroll;
+}
+
+.logs-list li{
+    /* color: #fffff0; */
+    font-family: 'Source Code Pro', monospace;
+}
+
+.logo-list li:focus, .logo-list li:focus-visible {
+    outline: none;
+}
