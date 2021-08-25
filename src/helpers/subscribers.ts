@@ -2,7 +2,7 @@ import PubSub from "pubsub-js";
 import messages from "../common/messages";
 
 const resetLogin = async (ig: any) => {
-    PubSub.subscribe('LOGOUT', async (msg: string, data: string) => {
+    PubSub.subscribe('LOGOUT', async () => {
         await ig.account.logout();
         messages.loggedOut();
     })
