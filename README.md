@@ -1,5 +1,5 @@
 # Instagram Automatic Liker
-## With Inbuilt dashboard
+## With In-built dashboard
 
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) 	![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) 	![Instagram](https://img.shields.io/badge/INSTAGRAM-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)
 
@@ -7,6 +7,7 @@
 Instagram Automatic Liker is a Node.js based command-line tool,
 It helps to automate Instagram by liking all the latest posts in timeline 🔥❤️️
 
+Dissociated fork from [muhemmedirfanc/like-automation-ig](https://github.com/muhemmedirfanc/like-automation-ig)
 
 ## Features
 
