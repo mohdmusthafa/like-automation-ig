@@ -14,13 +14,13 @@ prompt.message = "";
 nconf.use("memory");
 
 (async () => {
-  initializeDashboard();
   // const JUST_NOW_TIME = new Date().getTime() - 60000;
-  const JUST_NOW_TIME = 1626998400000;
+  const JUST_NOW_TIME = new Date("2020-01-01").getTime();
   nconf.set("JUST_NOW_TIME", JUST_NOW_TIME);
 
   const { username, password, sleep } = await getCredentials();
   nconf.set("sleep", sleep);
+  nconf.set("username", username);
 
   const ig = new IgApiClient();
   ig.state.generateDevice(username);
@@ -56,10 +56,10 @@ nconf.use("memory");
   }
 
   // //Start dashboard
-  // initializeDashboard();
+  initializeDashboard(ig);
 
   while (true) {
-    let medias = await getMedias(ig);
+    let medias = await getMedias(ig)
     await likeMedia(medias, ig);
   }
 })();

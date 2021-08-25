@@ -18,6 +18,7 @@ const successMessages = {
     likeSuccess: (username: string) => log(chalk.green(`Post liked successfully ===> ${username}`)),
     successLogin: () => log(chalk.green("successfully logged in.")),
     tokenSaved: () => log(chalk.greenBright("Token successfully saved.")),
+    loggedOut: () => log(chalk.green("logged out successfully!"))
 }
 
 const commonMessages = {

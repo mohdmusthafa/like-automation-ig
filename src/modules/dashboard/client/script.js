@@ -1,9 +1,10 @@
 const ansiToHtml = require("ansi-to-html");
 const convert = new ansiToHtml();
 const $ = require('jquery');
+const axios = require('axios');
 
 var eventList = document.getElementById("logs-list");
-var evtSource = new EventSource("http://localhost:3000/logs");
+var evtSource = new EventSource("/logs");
 evtSource.onmessage = function (e) {
   console.log("received event");
   console.log(e);
@@ -22,3 +23,8 @@ evtSource.onerror = function (e) {
 };
 
 console.log(evtSource);
+
+const resetLoginButton = document.getElementsByClassName("reset-login")[0];
+resetLoginButton.addEventListener('click', async () => {
+    await axios.delete('/api/login')
+})

@@ -6,6 +6,8 @@
 
 :root {
     --console-bg: #282C35;
+    --text-white: #fffff0;
+    --button-red: #de1738;
 }
 
 .container {
@@ -15,18 +17,19 @@
 
 .logs-container {
     width: 80vw;
-    height: 70vw;
+    height: 70vh;
     background-color: var(--console-bg);
-    margin-top: 2rem;
+    margin-top: 3rem;
     border-radius: 10px;
     display: flex;
+    position: relative;
 }
 
 .logs-list {
     list-style: none;
     margin: 10px 15px;
     flex: 1;
-    overflow-y: scroll;
+    overflow-y: hidden;
 }
 
 .logs-list li{
@@ -36,4 +39,21 @@
 
 .logo-list li:focus, .logo-list li:focus-visible {
     outline: none;
+}
+
+.buttons-container {
+    position: absolute;
+    right: 0;
+    top: -30px;
+}
+
+.reset-login {
+    background-color: var(--button-red);
+    color:  var(--text-white);
+}
+
+.btn {
+    border: 0;
+    border-radius: 5px;
+    padding: 5px;
 }
