@@ -1,6 +1,17 @@
 import chalk from "chalk";
+import PubSub from 'pubsub-js';
 
-const { log } = console;
+const dashboardEnabled = true;
+const ANSI_ESCAPE = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g
+
+
+const dashboardLogger = (message: any) => {
+    console.log(message);
+    const chalkEscapedString = message.replace(ANSI_ESCAPE, "")
+    PubSub.publish("LOGGER", chalkEscapedString);
+}
+
+let log = dashboardEnabled ? dashboardLogger : console.log;
 
 const successMessages = {
     foundJustNowPost: () => log(chalk.blueBright("found just now post.")),

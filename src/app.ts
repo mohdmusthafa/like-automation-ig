@@ -13,6 +13,9 @@ import {
 import { likeMedia, getMedias, login } from "./common";
 import { getCredentials } from "./helpers";
 import messages from "./common/messages";
+import dashboard from "./modules/dashboard";
+
+const argv = require('minimist')(process.argv.slice(2));
 
 prompt.start({ delimiter: colors.green(" >") });
 prompt.message = "";
@@ -20,6 +23,11 @@ prompt.message = "";
 nconf.use("memory");
 
 (async () => {
+    //Start dashboard
+    if (argv["dashboard"] && argv["dashboard"] === 'true') {
+      dashboard();
+    }
+
   // const JUST_NOW_TIME = new Date().getTime() - 60000;
   const JUST_NOW_TIME = 1626998400000;
   nconf.set('JUST_NOW_TIME', JUST_NOW_TIME)
@@ -60,9 +68,14 @@ nconf.use("memory");
     messages.successLogin()
   }
 
+  // //Start dashboard
+  // if (argv["dashboard"] && argv["dashboard"] === 'true') {
+  //   dashboard();
+  // }
+
   while (true) {
     let medias = await getMedias(ig);
-    await likeMedia(medias, ig);
+    // await likeMedia(medias, ig);
   }
 
 })();
