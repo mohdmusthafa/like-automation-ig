@@ -11,6 +11,7 @@ import initializeDashboard from "./helpers/initializeDashboard";
 prompt.start({ delimiter: colors.green(" >") });
 prompt.message = "";
 
+
 nconf.use("memory");
 
 (async () => {

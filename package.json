@@ -9,7 +9,7 @@
     ]
   },
   "scripts": {
-    "start": "node dist/app",
+    "start": "node dist/app --dashboard true",
     "build:dashboard": "browserify src/modules/dashboard/client/script.js > src/modules/dashboard/static/bundle.js && uglifyjs src/modules/dashboard/static/bundle.js -c -m -o src/modules/dashboard/static/bundle.js",
     "build": "npm run build:dashboard && tsc -p .",
     "dev": "nodemon src/app.ts --dashboard true",

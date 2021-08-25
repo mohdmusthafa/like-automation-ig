@@ -25,7 +25,9 @@ const commonMessages = {
     posted: (time: any) => log(chalk.yellow(`posted ${time}`)),
     nextRun: (time: any) => log(chalk.magenta(`next run ${time}`)),
     savingToken: () => log(chalk.yellow("Saving token")),
-    tokenExists: () => log(chalk.yellowBright("Token exist."))
+    tokenExists: () => log(chalk.yellowBright("Token exist.")),
+    noDashboard: () => log(chalk.blue("Dashboard disabled 💔, Run with --dashboard true for dashboard 💻 🚀")),
+    graceExit: () => log(chalk.whiteBright("Gracefully exiting... 🌞"))
 }
 
 const errorMessages = {
